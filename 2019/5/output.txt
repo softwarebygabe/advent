@@ -1,0 +1,18 @@
+gabe:5 (master) $ go run part1.go
+Hello World
+output -> 0
+output -> 0
+output -> 0
+output -> 0
+output -> 0
+output -> 0
+output -> 0
+output -> 0
+output -> 0
+output -> 4511442
+gabe:5 (master) $
+
+gabe:part2 (master) $ go run part2.go
+Hello World
+output -> 12648139
+gabe:part2 (master) $
