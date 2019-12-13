@@ -31,29 +31,38 @@ func parseInput(filepath string) []string {
 }
 
 func createOrbitTree(orbitStrings []string) *Node {
-	root := &Node{id: "COM"}
-	// find the next sourceID
-	comOrbits := ""
-	runThrough := []string{}
-	for i, os := range orbitStrings {
-		ids := strings.Split(os, ")")
-		if ids[0] == "COM" {
-			comOrbits = ids[1]
-			root.right = &Node{id: comOrbits}
-			// rm the COM
-			if i == 0 {
-				runThrough = orbitStrings[1:]
-			} else if i < len(orbitStrings)-1 {
-				runThrough = append(orbitStrings[0:i], orbitStrings[i+1:]...)
-			} else {
-				runThrough = []string{}
-			}
+	// parentID: [childID, childID]
+	instructionMap := map[string][]string{}
+	for _, orbitString := range orbitStrings {
+		osSplit := strings.Split(orbitString, ")")
+		parentID := osSplit[0]
+		childID := osSplit[1]
+		childIDs, inMap := instructionMap[parentID]
+		if !inMap {
+			instructionMap[parentID] = []string{childID}
+		} else {
+			instructionMap[parentID] = append(childIDs, childID)
 		}
 	}
 
-	// now do the rest
-	for len(runThrough) > 0 {
-		runThrough, comOrbits = findAndInsert(runThrough, root, comOrbits)
+	// now start with the COM as the root and walk map to create tree
+	root := &Node{id: "COM"}
+	parentQueue := append([]string{"COM"})
+	for i := 0; i < len(parentQueue); i++ {
+		currentParentID := parentQueue[i]
+		parentNode := find(root, currentParentID)
+		childIDs := instructionMap[currentParentID]
+		for _, childID := range childIDs {
+			if parentNode.right != nil && parentNode.left != nil {
+				panic("this node is full oh no!!")
+			}
+			if parentNode.right == nil {
+				parentNode.right = &Node{id: childID}
+			} else if parentNode.left == nil {
+				parentNode.left = &Node{id: childID}
+			}
+			parentQueue = append(parentQueue, childID)
+		}
 	}
 
 	return root
@@ -83,6 +92,7 @@ func findAndInsert(orbitStrings []string, tree *Node, nextSourceID string) ([]st
 
 }
 
+// Node ...
 type Node struct {
 	id    string
 	right *Node
@@ -193,7 +203,7 @@ func getNodeCount(root *Node) int {
 func main() {
 	fmt.Println("Hello World")
 
-	orbitStrings := parseInput("../test_input1.txt")
+	orbitStrings := parseInput("../input.txt")
 
 	tree := createOrbitTree(orbitStrings)
 
