@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/softwarebygabe/advent/pkg/helpers"
+	"github.com/softwarebygabe/advent/pkg/util"
 )
 
 type Square struct {
@@ -15,7 +15,7 @@ type Map [][]Square
 
 func parseMap(inputFile string) Map {
 	result := make([][]Square, 0)
-	helpers.EvalEachLine(inputFile, func(line string) {
+	util.EvalEachLine(inputFile, func(line string) {
 		row := []Square{}
 		splitList := strings.Split(line, "")
 		for _, s := range splitList {
