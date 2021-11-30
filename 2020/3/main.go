@@ -1,36 +1,11 @@
 package main
 
 import (
-	"bufio"
 	"fmt"
-	"log"
-	"os"
 	"strings"
+
+	"github.com/softwarebygabe/advent/pkg/helpers"
 )
-
-type lineEvaluator = func(line string)
-
-func doForAllInputLines(filepath string, fn lineEvaluator) {
-	// open file
-	file, err := os.Open(filepath)
-	if err != nil {
-		log.Fatal(err)
-	}
-	defer file.Close()
-	// scan through file
-	scanner := bufio.NewScanner(file)
-	for scanner.Scan() {
-
-		// parse an input line
-		line := scanner.Text()
-		fn(line)
-	}
-
-	if err := scanner.Err(); err != nil {
-		log.Fatal(err)
-	}
-	return
-}
 
 type Square struct {
 	IsTree bool
@@ -40,7 +15,7 @@ type Map [][]Square
 
 func parseMap(inputFile string) Map {
 	result := make([][]Square, 0)
-	doForAllInputLines(inputFile, func(line string) {
+	helpers.EvalEachLine(inputFile, func(line string) {
 		row := []Square{}
 		splitList := strings.Split(line, "")
 		for _, s := range splitList {
