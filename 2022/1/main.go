@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"sort"
 	"strconv"
 
 	"github.com/softwarebygabe/advent/pkg/util"
@@ -22,6 +23,10 @@ func parseInput(filename string) [][]int {
 			currElf = []int{}
 		}
 	})
+	if len(currElf) > 0 {
+		results = append(results, currElf)
+		currElf = []int{}
+	}
 	return results
 }
 
@@ -45,6 +50,18 @@ func Part1() {
 	fmt.Println("max cals:", maxCals)
 }
 
+func Part2() {
+	elves := parseInput("./input.txt")
+	elfTotals := []int{}
+	for _, elf := range elves {
+		elfTotals = append(elfTotals, sum(elf))
+	}
+	// sort the elf totals
+	sort.Ints(elfTotals)
+	largestThree := elfTotals[len(elfTotals)-3:]
+	fmt.Println(sum(largestThree))
+}
+
 func main() {
-	Part1()
+	Part2()
 }
