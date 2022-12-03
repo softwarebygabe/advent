@@ -115,6 +115,7 @@ func (g Grid) runSteps(n int) {
 			}
 		}
 		curr++
+		// time.Sleep(300 * time.Millisecond)
 	}
 }
 
@@ -166,13 +167,17 @@ func Part1() {
 	g := parseInput("./input.txt")
 	g.print()
 	fmt.Println()
-	g.runSteps(100)
+	g.runSteps(1000)
 	fmt.Println("Total Flash Count:", g.flashCount())
 }
 
-func main() {
+func Part2() {
 	g := parseInput("./input.txt")
 	g.print()
 	fmt.Println()
 	g.runStepsUntilAllFlashing(1000)
+}
+
+func main() {
+	Part1()
 }
