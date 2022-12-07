@@ -3,7 +3,6 @@ package main
 import (
 	"fmt"
 	"sort"
-	"strconv"
 	"strings"
 
 	"github.com/softwarebygabe/advent/pkg/util"
@@ -38,14 +37,6 @@ type file struct {
 
 func newFile(name string, size int) *file {
 	return &file{name: name, size: size}
-}
-
-func mustParseInt(s string) int {
-	v, err := strconv.Atoi(s)
-	if err != nil {
-		panic(err)
-	}
-	return v
 }
 
 func (d *dir) Print(t treeprint.Tree) {
@@ -112,7 +103,7 @@ func parseInput(filepath string) *dir {
 			name := words[1]
 			if size != "dir" {
 				// file
-				currDir.addFile(newFile(name, mustParseInt(size)))
+				currDir.addFile(newFile(name, util.MustParseInt(size)))
 			} else {
 				// dir
 				currDir.addDir(newDir(name))

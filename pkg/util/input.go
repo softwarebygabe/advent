@@ -4,6 +4,7 @@ import (
 	"bufio"
 	"log"
 	"os"
+	"strconv"
 )
 
 type LineEvaluator = func(line string)
@@ -27,4 +28,12 @@ func EvalEachLine(filepath string, fn LineEvaluator) {
 	if err := scanner.Err(); err != nil {
 		log.Fatal(err)
 	}
+}
+
+func MustParseInt(s string) int {
+	v, err := strconv.Atoi(s)
+	if err != nil {
+		panic(err)
+	}
+	return v
 }
