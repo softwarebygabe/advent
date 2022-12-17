@@ -41,7 +41,8 @@ type node struct {
 	x, y, depth int
 	value       rune
 	isEnd       bool
-	visited     bool
+	isStart     bool
+	// visited     bool
 }
 
 func newNode(value rune, x, y int) *node {
@@ -49,7 +50,7 @@ func newNode(value rune, x, y int) *node {
 }
 
 func (n *node) String() string {
-	nodeString := fmt.Sprintf("node: x=%d y=%d v=%c", n.x, n.y, n.value)
+	nodeString := fmt.Sprintf("node: x=%d y=%d v=%c depth=%d", n.x, n.y, n.value, n.depth)
 	// if n.parent != nil {
 	// 	nodeString += fmt.Sprintf("\nparent: x=%d y=%d v=%c", n.parent.x, n.parent.y, n.parent.value)
 	// } else {
@@ -58,9 +59,9 @@ func (n *node) String() string {
 	return nodeString
 }
 
-func (n *node) visit() {
-	n.visited = true
-}
+// func (n *node) visit() {
+// 	n.visited = true
+// }
 
 func (n *node) addChild(cn *node) {
 	cn.depth = n.depth + 1
@@ -81,6 +82,11 @@ func parseInput(filepath string) [][]*node {
 			n := newNode(r, x, y)
 			if r == 'E' {
 				n.isEnd = true
+				n.value = 'z'
+			}
+			if r == 'S' {
+				n.isStart = true
+				n.value = 'a'
 			}
 			runes = append(runes, n)
 		}
@@ -120,7 +126,7 @@ func processTo(board [][]*node, pn *node, x, y int) *node {
 	if pn.parent != nil && pn.parent.eq(to) {
 		return nil
 	}
-	if to.visited {
+	if 0 < to.depth && to.depth <= pn.depth+1 {
 		return nil
 	}
 	if canMoveTo(pn.value, to.value) {
@@ -146,19 +152,27 @@ func PrintTree(root *node) {
 	fmt.Println(tree.String())
 }
 
-func part1() {
-	board := parseInput("input_test.txt")
-	root := board[0][0]
-	// root.addChild(newNode(board[0][1]))
-	// root.addChild(newNode(board[1][0]))
+func findRoot(board [][]*node) *node {
+	for _, row := range board {
+		for _, n := range row {
+			if n.isStart {
+				return n
+			}
+		}
+	}
+	return nil
+}
+
+func findShortestPathLengthToEnd(board [][]*node, start *node) int {
 	queue := newNodeQueue()
-	queue.enqueue(root)
+	queue.enqueue(start)
 	var answer int
+	// var currCycle int
+	// maxCycle := 5
 	for !queue.empty() {
-		PrintTree(root)
 		// currCycle++
 		currParent := queue.dequeue()
-		currParent.visit()
+		// fmt.Println("current parent:", currParent)
 		// look up, down, left, right
 		upY := currParent.y - 1
 		downY := currParent.y + 1
@@ -192,14 +206,52 @@ func part1() {
 				break
 			}
 		}
+		// PrintTree(root)
 		// fmt.Println(currParent)
 		for _, cn := range currParent.children {
 			queue.enqueue(cn)
 		}
 	}
+	return answer
+}
+
+func findRootOptions(board [][]*node) []*node {
+	results := []*node{}
+	for _, row := range board {
+		for _, n := range row {
+			if n.value == 'a' {
+				results = append(results, n)
+			}
+		}
+	}
+	return results
+}
+
+func part1() {
+	board := parseInput("input.txt")
+	root := findRoot(board)
+	answer := findShortestPathLengthToEnd(board, root)
 	fmt.Println("steps:", answer)
 }
 
+func part2() {
+	inputFile := "input.txt"
+	board := parseInput(inputFile)
+	startingPoints := findRootOptions(board)
+	fmt.Println("starting points:", len(startingPoints))
+	var minLength int
+	for _, startingPoint := range startingPoints {
+		fmt.Println(startingPoint)
+		freshBoard := parseInput(inputFile)
+		pathLength := findShortestPathLengthToEnd(freshBoard, startingPoint)
+		fmt.Println("path length:", pathLength)
+		if pathLength > 0 && (minLength == 0 || pathLength < minLength) {
+			minLength = pathLength
+		}
+	}
+	fmt.Println("min length:", minLength)
+}
+
 func main() {
-	part1()
+	part2()
 }
