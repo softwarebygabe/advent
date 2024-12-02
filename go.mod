@@ -6,6 +6,7 @@ require (
 	github.com/briandowns/spinner v1.23.0
 	github.com/dominikbraun/graph v0.23.0
 	github.com/xlab/treeprint v1.1.0
+	gonum.org/v1/gonum v0.14.0
 )
 
 require (

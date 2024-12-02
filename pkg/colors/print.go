@@ -50,3 +50,29 @@ func Printf(c Color, format string, args ...interface{}) {
 	newArgs = append(newArgs, colorReset)
 	fmt.Printf("%s"+format+"%s", newArgs...)
 }
+
+func Sprintf(c Color, format string, args ...interface{}) string {
+	var color string
+	switch c {
+	case Red:
+		color = colorRed
+	case Green:
+		color = colorGreen
+	case Yellow:
+		color = colorYellow
+	case Blue:
+		color = colorBlue
+	case Purple:
+		color = colorPurple
+	case Cyan:
+		color = colorCyan
+	case White:
+		color = colorWhite
+	default:
+		color = colorWhite
+	}
+	newArgs := []interface{}{color}
+	newArgs = append(newArgs, args...)
+	newArgs = append(newArgs, colorReset)
+	return fmt.Sprintf("%s"+format+"%s", newArgs...)
+}

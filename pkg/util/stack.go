@@ -34,3 +34,7 @@ func (s *Stack[T]) Peek() (T, bool) {
 	v := (*s)[len(*s)-1]
 	return v, true
 }
+
+func (s *Stack[T]) Len() int {
+	return len(*s)
+}
