@@ -140,7 +140,7 @@ func part1(filename string) []node {
 }
 
 func part2(filename string) {
-	loop := part1(filename)
+	// loop := part1(filename)
 	// TODO: scan through and do subtraction on the col indexes
 	// also do it on the row indexes and the diffs should be the areas
 	// needed
