@@ -38,3 +38,10 @@ func (s *Stack[T]) Peek() (T, bool) {
 func (s *Stack[T]) Len() int {
 	return len(*s)
 }
+
+// Reset empties all entries in the stack.
+func (s *Stack[T]) Reset() {
+	for s.Len() > 0 {
+		s.Pop()
+	}
+}

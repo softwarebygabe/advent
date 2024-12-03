@@ -2,10 +2,22 @@ package util
 
 import (
 	"bufio"
+	"io"
 	"log"
 	"os"
 	"strconv"
 )
+
+type ReaderProcessor[T []string | []int] func(io.Reader) T
+
+func ReadInput[T []string | []int](fname string, fn ReaderProcessor[T]) (T, error) {
+	f, err := os.Open(fname)
+	if err != nil {
+		return nil, err
+	}
+	defer f.Close()
+	return fn(f), nil
+}
 
 type LineEvaluator = func(line string)
 
