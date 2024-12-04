@@ -361,6 +361,17 @@ const (
 	DownRight
 )
 
+var DirectionsAll = []Direction{
+	Up,
+	Down,
+	Left,
+	Right,
+	UpLeft,
+	UpRight,
+	DownLeft,
+	DownRight,
+}
+
 func (d Direction) Opposite() Direction {
 	switch d {
 	case Up:
